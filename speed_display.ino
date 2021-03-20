@@ -43,7 +43,7 @@ void loop(){
       display.display();
     }
   }
-  vibration=digitalRead(vibrator_sensor);
+  int vibration=digitalRead(vibrator_sensor); 
   if(vibration==1){
     getlocation();
     gsm900.println("AT+CMGF=1");
@@ -63,6 +63,9 @@ void loop(){
     gsm900.println(sec_val);
     gsm900.write(26);
     digitalWrite(12,HIGH);   //denotes the end of transimission of ms g to first no.
+    delay(100);
+    digitalWrite(12,LOW);
+    
 
     gsm900.println("AT+CMGF=1");
     gsm900.println("AT+CMGS=\"+919400832924\"");  //receipent number 2 
@@ -81,6 +84,8 @@ void loop(){
     gsm900.println(sec_val);
     gsm900.write(26);
     digitalWrite(13,HIGH);    //denotes the end of transmission of msg to 2nd no.
+    delay(100);
+    digitalWrite(13,LOW);
   }
 }
 
