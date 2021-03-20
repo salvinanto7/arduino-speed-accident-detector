@@ -5,14 +5,14 @@
 
 #define OLED_ADDRESS 0x3C
 #define OLED_RESET -1
-#define vibrator_sensor 11
+#define vibrator_sensor 7
 
 void display_speed();
 String lat_val , long_val, hour_val , mins_val, sec_val;
 Adafruit_SH1106 display(OLED_RESET);
 TinyGPSPlus gps;
-SoftwareSerial gpssoft(2,3);  //rx=2 ,tx=3
-SoftwareSerial gsm900(14,15);  //rx=14  tx=15
+SoftwareSerial gpssoft(17,16);  //rx=17 ,tx=16
+SoftwareSerial gsm900(19,18);  //rx=19  tx=18
 
 void setup(){
   Serial.begin(9600);
@@ -43,10 +43,11 @@ void loop(){
       display.display();
     }
   }
-  if(vibrator_sensor ==1){
+  vibration=digitalRead(vibrator_sensor);
+  if(vibration==1){
     getlocation();
     gsm900.println("AT+CMGF=1");
-    gsm900.println("AT+CMGS=\"+919875641230\"");  //receipent number 1 
+    gsm900.println("AT+CMGS=\"+917994537611\"");  //receipent number 1 
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
     gsm900.print("my location:");
     gsm900.print("https://www.google.com/maps/@");
@@ -64,7 +65,7 @@ void loop(){
     digitalWrite(12,HIGH);   //denotes the end of transimission of ms g to first no.
 
     gsm900.println("AT+CMGF=1");
-    gsm900.println("AT+CMGS=\"+919876543210\"");  //receipent number 2 
+    gsm900.println("AT+CMGS=\"+919400832924\"");  //receipent number 2 
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
     gsm900.print("my location:");
     gsm900.print("https://www.google.com/maps/@");
