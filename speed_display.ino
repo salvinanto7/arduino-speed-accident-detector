@@ -61,7 +61,7 @@ void loop(){
     gsm900.println(mins_val);
     gsm900.println(":");
     gsm900.println(sec_val);
-    gsm900.write(26);
+    gsm900.write((char)26);
     digitalWrite(12,HIGH);   //denotes the end of transimission of ms g to first no.
     delay(100);
     // for testing purpose only
@@ -111,7 +111,7 @@ void display_speed(){
   }
 }
 
-void getlocation(){
+int getlocation(){
   lat_val = gps.location.lat(); 
   long_val= gps.location.lng();
   if (gps.time.isValid()) {
