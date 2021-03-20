@@ -8,7 +8,7 @@
 #define vibrator_sensor 7
 
 void display_speed();
-String lat_val , long_val, hour_val , mins_val, sec_val;
+int lat_val , long_val, hour_val , mins_val, sec_val;
 Adafruit_SH1106 display(OLED_RESET);
 TinyGPSPlus gps;
 SoftwareSerial gpssoft(17,16);  //rx=17 ,tx=16
@@ -64,6 +64,13 @@ void loop(){
     gsm900.write(26);
     digitalWrite(12,HIGH);   //denotes the end of transimission of ms g to first no.
     delay(100);
+    // for testing purpose only
+    Serial.print(" my location :");
+    Serial.print("https://www.google.com/maps/@");
+    Serial.println(lat_val);
+    Serial.println(",");
+    Serial.println(long_val);
+    Serial.println("'14z");
     digitalWrite(12,LOW);
     
 
@@ -82,7 +89,7 @@ void loop(){
     gsm900.println(mins_val);
     gsm900.println(":");
     gsm900.println(sec_val);
-    gsm900.write(26);
+    gsm900.write((char)26);
     digitalWrite(13,HIGH);    //denotes the end of transmission of msg to 2nd no.
     delay(100);
     digitalWrite(13,LOW);
