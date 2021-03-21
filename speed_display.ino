@@ -9,7 +9,8 @@
 #define vibrator_sensor 7
 
 void display_speed();
-int lat_val , long_val, hour_val , mins_val, sec_val;
+int hour_val , mins_val, sec_val;
+float lat_val , long_val;
 Adafruit_SH1106 display(OLED_RESET);
 TinyGPSPlus gps;
 SoftwareSerial gpssoft(15,14);  //rx=17 ,tx=16
@@ -61,9 +62,9 @@ void loop(){
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
     gsm900.println("my location:");
     gsm900.print("https://www.google.com/maps/@");
-    gsm900.print(lat_val);
+    gsm900.print(lat_val,6);
     gsm900.print(",");
-    gsm900.print(long_val);
+    gsm900.print(long_val,6);
     gsm900.println(",14z");
     gsm900.println("time:");
     gsm900.print(hour_val);
@@ -77,9 +78,9 @@ void loop(){
     // for testing purpose only
     Serial.println(" my location :");
     Serial.print("https://www.google.com/maps/@");
-    Serial.print(lat_val);
+    Serial.print(lat_val,6);
     Serial.print(",");
-    Serial.print(long_val);
+    Serial.print(long_val,6);
     Serial.println("'14z");
     digitalWrite(12,LOW);
     
@@ -89,9 +90,9 @@ void loop(){
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
     gsm900.println("my location:");
     gsm900.print("https://www.google.com/maps/@");
-    gsm900.print(lat_val);
+    gsm900.print(lat_val,6);
     gsm900.print(",");
-    gsm900.print(long_val);
+    gsm900.print(long_val,6);
     gsm900.println(",14z");
     gsm900.println("time:");
     gsm900.print(hour_val);
