@@ -33,14 +33,17 @@ void loop(){
   display.setCursor(27,2);
   display.print("SPEED (KMS)");
   display.display();
-  while(gpssoft.available()>0){
-    if (gps.encode(gpssoft.read()))
+  while(gpssoft.available()){
+    if(gps.encode(gpssoft.read())){
       display_speed();
+    }
     else if(millis() >5000 && gps.charsProcessed()<10){   //checks whether the gps is runnig for 5 seconds and recieved data less than 10 characters
       display.setTextSize(1);
-      display.setCursor(35,40);
+      display.setCursor(0,4);
       display.print("ERROR IN COLLECTING DATA!!");
+      Serial.print("ERROR IN COLLECTING DATA!"); //debug purpose
       display.display();
+      while(1);
     }
   }
   int vibration=digitalRead(vibrator_sensor); 
@@ -49,27 +52,27 @@ void loop(){
     gsm900.println("AT+CMGF=1");
     gsm900.println("AT+CMGS=\"+917994537611\"");  //receipent number 1 
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
-    gsm900.print("my location:");
+    gsm900.println("my location:");
     gsm900.print("https://www.google.com/maps/@");
-    gsm900.println(lat_val);
-    gsm900.println(",");
-    gsm900.println(long_val);
+    gsm900.print(lat_val);
+    gsm900.print(",");
+    gsm900.print(long_val);
     gsm900.println(",14z");
-    gsm900.print("time:");
-    gsm900.println(hour_val);
-    gsm900.println(":");
-    gsm900.println(mins_val);
-    gsm900.println(":");
-    gsm900.println(sec_val);
+    gsm900.println("time:");
+    gsm900.print(hour_val);
+    gsm900.print(":");
+    gsm900.print(mins_val);
+    gsm900.print(":");
+    gsm900.print(sec_val);
     gsm900.write((char)26);
     digitalWrite(12,HIGH);   //denotes the end of transimission of ms g to first no.
     delay(100);
     // for testing purpose only
-    Serial.print(" my location :");
+    Serial.println(" my location :");
     Serial.print("https://www.google.com/maps/@");
-    Serial.println(lat_val);
-    Serial.println(",");
-    Serial.println(long_val);
+    Serial.print(lat_val);
+    Serial.print(",");
+    Serial.print(long_val);
     Serial.println("'14z");
     digitalWrite(12,LOW);
     
@@ -77,17 +80,17 @@ void loop(){
     gsm900.println("AT+CMGF=1");
     gsm900.println("AT+CMGS=\"+919400832924\"");  //receipent number 2 
     gsm900.print("PLEASE HELP ,  I MET WITH AN ACCIDENT!");
-    gsm900.print("my location:");
+    gsm900.println("my location:");
     gsm900.print("https://www.google.com/maps/@");
-    gsm900.println(lat_val);
-    gsm900.println(",");
-    gsm900.println(long_val);
+    gsm900.print(lat_val);
+    gsm900.print(",");
+    gsm900.print(long_val);
     gsm900.println(",14z");
-    gsm900.print("time:");
-    gsm900.println(hour_val);
-    gsm900.println(":");
-    gsm900.println(mins_val);
-    gsm900.println(":");
+    gsm900.println("time:");
+    gsm900.print(hour_val);
+    gsm900.print(":");
+    gsm900.print(mins_val);
+    gsm900.print(":");
     gsm900.println(sec_val);
     gsm900.write((char)26);
     digitalWrite(13,HIGH);    //denotes the end of transmission of msg to 2nd no.
@@ -99,8 +102,9 @@ void loop(){
 void display_speed(){
   if(gps.speed.isValid()){
     display.setTextSize(1);
-    display.setCursor(35,40);
+    display.setCursor(0,6);
     display.print(gps.speed.kmph());
+    Serial.print(gps.speed.kmph());  //debug purpose
     display.display();
   }
   else{
@@ -108,6 +112,7 @@ void display_speed(){
     display.setCursor(35,40);
     display.print("NO DATA!!");
     display.display();
+    Serial.print("NO DATA!!");
   }
 }
 
