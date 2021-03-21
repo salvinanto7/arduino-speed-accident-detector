@@ -1,4 +1,5 @@
 #include <TinyGPS++.h>
+#include <TinyGPS++.h>
 #include<SoftwareSerial.h>
 #include<Wire.h>
 #include<Adafruit_SH1106.h>
@@ -11,7 +12,7 @@ void display_speed();
 int lat_val , long_val, hour_val , mins_val, sec_val;
 Adafruit_SH1106 display(OLED_RESET);
 TinyGPSPlus gps;
-SoftwareSerial gpssoft(17,16);  //rx=17 ,tx=16
+SoftwareSerial gpssoft(15,14);  //rx=17 ,tx=16
 SoftwareSerial gsm900(19,18);  //rx=19  tx=18
 
 void setup(){
@@ -20,7 +21,7 @@ void setup(){
   gsm900.begin(9600);
   pinMode(vibrator_sensor,INPUT);
   pinMode(12,OUTPUT);
-  pinMode(13,OUTPUT);
+  pinMode(11,OUTPUT);
   display.begin(OLED_ADDRESS);      // removed a line SH_1106_SWITCHCAPVACC, from begin  : uswed to gnerae 3.3v INTERNALLY. connect the vcc of ole to 3.3v terminal of 3.3v of nano
   display.clearDisplay();
   display.display();
@@ -33,7 +34,9 @@ void loop(){
   display.setCursor(27,2);
   display.print("SPEED (KMS)");
   display.display();
+  display_speed();
   while(gpssoft.available()){
+    Serial.print("gps available"); //debug
     if(gps.encode(gpssoft.read())){
       display_speed();
     }
@@ -45,6 +48,10 @@ void loop(){
       display.display();
       while(1);
     }
+  }
+  while(gpssoft.available()==0){
+    Serial.print("error getting gps data");
+    while(true);
   }
   int vibration=digitalRead(vibrator_sensor); 
   if(vibration==1){
@@ -93,18 +100,21 @@ void loop(){
     gsm900.print(":");
     gsm900.println(sec_val);
     gsm900.write((char)26);
-    digitalWrite(13,HIGH);    //denotes the end of transmission of msg to 2nd no.
+    digitalWrite(11,HIGH);    //denotes the end of transmission of msg to 2nd no.
     delay(100);
-    digitalWrite(13,LOW);
+    digitalWrite(11,LOW);
   }
+ 
 }
 
 void display_speed(){
+  Serial.print("entered speed function");
   if(gps.speed.isValid()){
     display.setTextSize(1);
-    display.setCursor(0,6);
+    display.setCursor(10,6);
     display.print(gps.speed.kmph());
     Serial.print(gps.speed.kmph());  //debug purpose
+    Serial.print("speed");
     display.display();
   }
   else{
